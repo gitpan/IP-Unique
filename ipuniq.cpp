@@ -8,7 +8,6 @@
 
 #include <string>
 #include <iostream>
-#include <list>
 #include <math.h>
 using namespace std;
 #include "ipuniq.h"
@@ -18,20 +17,17 @@ using namespace std;
 #define IPPARTLENMAX 3
 #define IPNUMMAX 255
 
-#define CLASS_A 0
-#define CLASS_B 1
-#define CLASS_C 2
-#define CLASS_D 3
-
 ipuniq::ipuniq()
 {
 	// Clear out all of our values
 
 	unique_ips = 0;
 	total_ips = 0;
-	is_sorted = 0;
 	ip_part_table = 0;
 	ip_numerical_table = 0;
+
+	size = (unsigned int) (pow((double) 2, (double)32)/(sizeof(int)*8));
+        ips = (unsigned int*) malloc(sizeof(unsigned int) * size);
 
 	return;
 }
@@ -52,6 +48,11 @@ int ipuniq::add_ip(string ipstr)
 {
 	//return if we don't get a string.
 	if(ipstr.length() == 0)
+	{
+		return 0;
+	}
+
+	if(ips == 0)
 	{
 		return 0;
 	}
@@ -229,16 +230,29 @@ bool ipuniq::insert_ip(void)
 		return 0;
 	}
 
-	unsigned int bitnum = 0;
+	if(ips == 0)
+	{
+		return 0;
+	}
+
+	unsigned int num = 0;
 
 	for(int i = 0; i<IPPARTMAX; i++)
 	{
-		bitnum = bitnum << 8;
-		bitnum += ip_numerical_table[i];
+		num = num << 8;
+		num += ip_numerical_table[i];
 	}
 
-	is_sorted = 0;
-	ip_table.push_front(bitnum);
+	unsigned int index = (num - (num % 32))/((unsigned int) pow((double)2,(double)5));
+	unsigned int bit = (1 << (num % 32));
+
+ 	if((ips[index] & bit) != bit)
+	{
+		unique_ips++;
+	}
+
+	ips[index] = ips[index] | bit;
+
 	total_ips++; //We can't touch this number;	
 
 	return 1;		
@@ -250,45 +264,6 @@ bool ipuniq::insert_ip(void)
 
 void ipuniq::compact(void)
 {
-
-	ip_table.sort();
-
-	list<unsigned int>::iterator list_pos = ip_table.begin();
-	list<unsigned int>::iterator next_pos = list_pos;
-	unsigned int list_size = ip_table.size();
-	unsigned int list_spot = 1;
-
-	unique_ips = 0;
-	is_sorted = 1;
-
-	if(list_size == 0)
-	{
-		return;
-	}
-
-	while(list_spot <= list_size)
-	{
-		next_pos++;
-
-		if(*(next_pos) < *(list_pos) || list_spot == list_size) //We've wrapped around
-		{
-			unique_ips++;
-			return;
-		}
-
-		if(*(list_pos) == *(next_pos))
-		{
-			ip_table.erase(list_pos);
-		}else{
-			unique_ips++;
-		}
-		
-		list_pos = next_pos;
-		list_spot++;
-	}	
-
-	is_sorted = 1;
-
 	return;
 }
 
@@ -297,10 +272,6 @@ void ipuniq::compact(void)
 
 unsigned int ipuniq::unique(void)
 {
-	if(!is_sorted)
-	{
-		this->compact();
-	}
 	return unique_ips;
 }
 

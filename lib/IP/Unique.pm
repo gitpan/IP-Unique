@@ -6,7 +6,7 @@ use warnings;
 
 require Exporter;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 require XSLoader;
 XSLoader::load('IP::Unique', $VERSION);
@@ -72,7 +72,7 @@ IP::Unique is an OO module, so nothing is exported.  The module contains the fol
 
 =item * C<compact()>
 
-	compact() is an internal function that is exposed for the rare situation where you think you can save yourself up memory by removing all of the duplicates stored internally.  It is unlikely that you will save yourself a lot of space, unless you have heavy duplicate saturation.  This function is called internally before C<unique>(), so there's no need to do so, except to attempt to save memory mid-run. For slower machines, this may take some time to complete. When parsing a well-used websites logs (for which this module was written), you will probably not need this function. YMMV.
+	This is a version 0.01 function that is no longer needed. The call simply returns.
 
 =back
 
@@ -94,7 +94,17 @@ IP::Unique is an OO module, so nothing is exported.  The module contains the fol
 
 =head1 CHANGES
 
-B<Version 0.01> - Feb 19th, 2003
+B<Version 0.02> - May 11th, 2004
+
+=over 4 
+
+=item * Rewrite to bit-flag mechanism, away from STL lists.
+
+=item * Compact is now deprecated
+
+=back
+
+B<Version 0.01> - Feb 19th, 2004
 
 =over 4
 

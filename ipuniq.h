@@ -1,5 +1,4 @@
 #include <string>
-#include <list>
 using namespace std;
 
 class ipuniq {
@@ -15,9 +14,9 @@ class ipuniq {
 
 		unsigned int unique_ips;
 		unsigned int total_ips;
-		bool is_sorted;
-		//bool**** ip_table;
-		list<unsigned int> ip_table;
+
+		unsigned int* ips;
+		unsigned int size;
 
 		string work_string;
 		string* ip_part_table;
