@@ -1,4 +1,8 @@
 CHANGES
+     Version 0.03 - May 11th, 2004
+
+     * Fixed a memory leak where the main base wasn't destroyed when the object was undef'ed
+
      Version 0.02 - May 11th, 2004
 
      * Rewrite to bit-flag mechanism, away from STL lists.

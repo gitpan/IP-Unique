@@ -6,7 +6,7 @@ use warnings;
 
 require Exporter;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 require XSLoader;
 XSLoader::load('IP::Unique', $VERSION);
@@ -93,6 +93,14 @@ IP::Unique is an OO module, so nothing is exported.  The module contains the fol
 =back
 
 =head1 CHANGES
+
+B<Version 0.03> - May 11th, 2004
+
+=over 4 
+
+=item * Fixed a memory leak where the main base wasn't destroyed when the object was undef'ed
+
+=back
 
 B<Version 0.02> - May 11th, 2004
 

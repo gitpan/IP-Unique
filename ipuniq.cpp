@@ -37,6 +37,11 @@ ipuniq::~ipuniq()
 	//We'll need to destry the dynamically allocated stuff
 
 	this->clear_work_tables();
+
+	if(ips != 0)
+	{
+		free(ips);
+	}
 	return;
 }
 
